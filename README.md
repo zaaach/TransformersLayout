@@ -41,7 +41,7 @@ dependencies {
 }
 ```
 
-记得把`x.y.z`替换为 [![](https://jitpack.io/v/zaaach/TransformersLayout.svg)](https://jitpack.io/#zaaach/TransformersLayout) 中的数字
+记得把`x.y.z`替换为[![jitpack](https://jitpack.io/v/zaaach/TransformersLayout.svg)](https://jitpack.io/#zaaach/TransformersLayout)中的数字
 
 # How to use
 
