@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TransformersLayout">
+        <!--每页几列-->
+        <attr name="tl_spanCount" format="integer"/>
+        <!--每页几行-->
+        <attr name="tl_lines" format="integer"/>
+        <!--滚动条宽度-->
+        <attr name="tl_scrollbarWidth" format="dimension|reference"/>
+        <!--滚动条高度-->
+        <attr name="tl_scrollbarHeight" format="dimension|reference"/>
+        <!--滚动条上间距-->
+        <attr name="tl_scrollbarMarginTop" format="dimension|reference"/>
+        <!--滚动条圆角-->
+        <attr name="tl_scrollbarRadius" format="dimension|reference"/>
+        <!--滚动条轨道颜色-->
+        <attr name="tl_scrollbarTrackColor" format="color|reference"/>
+        <!--滚动条进度颜色-->
+        <attr name="tl_scrollbarThumbColor" format="color|reference"/>
+    </declare-styleable>
+</resources>
