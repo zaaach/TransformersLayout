@@ -1,4 +1,4 @@
-[![Licence](https://img.shields.io/badge/Licence-Apache2-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16) [![](https://jitpack.io/v/zaaach/TransformersLayout.svg)](https://jitpack.io/#zaaach/TransformersLayout) 
+[![Licence](https://img.shields.io/badge/Licence-Apache2-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0) [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16) [![jitpack](https://jitpack.io/v/zaaach/TransformersLayout.svg)](https://jitpack.io/#zaaach/TransformersLayout)
 
 # TransformersLayout
 
@@ -16,7 +16,7 @@
 # Preview
 ![screenshot](https://github.com/zaaach/TransformersLayout/raw/master/arts/preview.jpg)
 
-[点击下载APP体验](https://github.com/zaaach/TransformersLayout/raw/master/arts/app-debug-1.0.0.apk)
+[点击下载APK体验](https://github.com/zaaach/TransformersLayout/raw/master/arts/app-debug-1.0.0.apk)
 
 # Install
 
@@ -41,7 +41,7 @@ dependencies {
 }
 ```
 
-记得把`x.y.z`替换为[![](https://jitpack.io/v/zaaach/TransformersLayout.svg)](https://jitpack.io/#zaaach/TransformersLayout)中的数字
+记得把`x.y.z`替换为 [![](https://jitpack.io/v/zaaach/TransformersLayout.svg)](https://jitpack.io/#zaaach/TransformersLayout) 中的数字
 
 # How to use
 
@@ -131,7 +131,7 @@ header.apply(options)
 ### 支持的attrs属性：
 
 | Attributes | Format | Description |
-| :------- | ---- | ---- |
+| -------- | ---- | ---- |
 | tl_spanCount | integer | 每页列数，默认5 |
 | tl_lines | integer | 每页行数，默认2 |
 | tl_scrollbarWidth | dimension \| reference | scrollbar宽度，默认36dp |
