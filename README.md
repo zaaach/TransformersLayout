@@ -126,7 +126,7 @@ header.apply(options)
         });
 ```
 
-:smirk: Good luck！！！
+:smirk:Good luck！！！
 
 ### 支持的attrs属性：
 
