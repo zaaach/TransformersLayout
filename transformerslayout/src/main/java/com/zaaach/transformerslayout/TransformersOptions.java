@@ -40,12 +40,7 @@ public class TransformersOptions {
         private int scrollBarThumbColor;
         private float scrollBarRadius = -1;
 
-        /**
-         * 圆角半径 单位：dp
-         * @param radius
-         * @return
-         */
-        public Builder scrollBarRadius(float radius) {
+        public Builder scrollBarRadius(@Px float radius) {
             this.scrollBarRadius = radius;
             return this;
         }
