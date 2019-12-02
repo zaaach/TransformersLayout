@@ -6,7 +6,7 @@
 >
 > 整体结构是Recyclerview + 滚动条
 
-#### Features
+### Features
 
 - 每页行数、列数可配置
 - 滚动状态自动恢复
@@ -62,7 +62,7 @@ dependencies {
     app:tl_scrollbarThumbColor="#FFC107"/>
 ```
 
-**Step 2：** 自定义ViewHolder
+**Step 2：** 自定义ViewHolder，第三步需要用到
 
 ```java
 public class NavAdapterViewHolder extends Holder<Nav> {
@@ -138,7 +138,7 @@ header.apply(options)
 | tl_scrollbarHeight | dimension \| reference | scrollbar高度，默认3dp |
 | tl_scrollbarMarginTop | dimension \| reference | scrollbar上间距 |
 | tl_scrollbarRadius | dimension \| reference | scrollbar圆角，默认高度的一半 |
-| tl_scrollbarTrackColor | color \| reference | scrollbar轨道颜色色 |
+| tl_scrollbarTrackColor | color \| reference | scrollbar轨道颜色 |
 | tl_scrollbarThumbColor | color \| reference | scrollbar高亮颜色 |
 
 # License
