@@ -14,7 +14,7 @@
 - scrollbar样式可配置
 
 # Preview
-![screenshot](https://github.com/zaaach/TransformersLayout/raw/master/arts/preview.jpg)![gif](https://github.com/zaaach/TransformersLayout/raw/master/arts/preview2.gif)
+![gif](https://github.com/zaaach/TransformersLayout/raw/master/arts/preview2.gif)
 
 [点击下载APK体验](https://github.com/zaaach/TransformersLayout/raw/master/arts/app-debug-1.0.0.apk)
 
