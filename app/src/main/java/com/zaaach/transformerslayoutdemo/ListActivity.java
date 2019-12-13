@@ -40,8 +40,8 @@ public class ListActivity extends AppCompatActivity {
                 .lines(2)
                 .spanCount(5)
                 .scrollBarWidth(Util.dp2px(this, 40))
-                .scrollBarHeight(Util.dp2px(this, 40))
-                .scrollBarRadius(Util.dp2px(this, 40))/*Util.dp2px(this, 3) / 2f*/
+                .scrollBarHeight(Util.dp2px(this, 4))
+                .scrollBarRadius(Util.dp2px(this, 4) / 2)
                 .scrollBarTopMargin(Util.dp2px(this, 6))
                 .scrollBarTrackColor(Color.parseColor("#e5e5e5"))
                 .scrollBarThumbColor(Color.parseColor("#658421"))
