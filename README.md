@@ -98,7 +98,7 @@ public class NavAdapterViewHolder extends Holder<Nav> {
 ```java
 List<Nav> navList = DataFactory.loadData();
 TransformersLayout<Nav> header = findViewById();
-//options可选配置
+//options可选配置，会覆盖xml里的属性
 TransformersOptions options = new TransformersOptions.Builder()
         .lines(2)
         .spanCount(5)
@@ -106,8 +106,10 @@ TransformersOptions options = new TransformersOptions.Builder()
         .scrollBarHeight(Util.dp2px(this, 3))
         .scrollBarRadius(Util.dp2px(this, 3) / 2f)
         .scrollBarTopMargin(Util.dp2px(this, 6))
+    	.scrollBarTrackColor(Color.parseColor("#e5e5e5"))
+        .scrollBarThumbColor(Color.parseColor("#658421"))
         .build();
-header.apply(options)
+header.apply(options)//options可为null
         .addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -140,6 +142,12 @@ header.apply(options)
 | tl_scrollbarRadius | dimension \| reference | scrollbar圆角，默认高度的一半 |
 | tl_scrollbarTrackColor | color \| reference | scrollbar轨道颜色 |
 | tl_scrollbarThumbColor | color \| reference | scrollbar高亮颜色 |
+
+# Change log
+
+2019-12-13 
+
+- 修复滚动条颜色配置无效的问题
 
 # License
 

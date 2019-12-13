@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -175,8 +174,12 @@ public class TransformersLayout<T> extends LinearLayout {
             scrollBarHeight = options.scrollBarHeight <= 0 ? scrollBarHeight : options.scrollBarHeight;
             scrollBarRadius = options.scrollBarRadius < 0 ? scrollBarHeight/2f : options.scrollBarRadius;
             scrollBarTopMargin = options.scrollBarTopMargin <= 0 ? scrollBarTopMargin : options.scrollBarTopMargin;
-            scrollBarTrackColor = options.scrollBarTrackColor <= 0 ? DEFAULT_TRACK_COLOR : options.scrollBarTrackColor;
-            scrollBarThumbColor = options.scrollBarThumbColor <= 0 ? DEFAULT_THUMB_COLOR : options.scrollBarThumbColor;
+
+//            Log.e(TAG, "trackColor = " + options.scrollBarTrackColor);
+//            Log.e(TAG, "thumbColor = " + options.scrollBarThumbColor);
+//            Log.e(TAG, "radius = " + options.scrollBarRadius);
+            scrollBarTrackColor = options.scrollBarTrackColor == 0 ? DEFAULT_TRACK_COLOR : options.scrollBarTrackColor;
+            scrollBarThumbColor = options.scrollBarThumbColor == 0 ? DEFAULT_THUMB_COLOR : options.scrollBarThumbColor;
 
             if (newLines != lines){
                 recyclerView.setLayoutManager(new GridLayoutManager(getContext(), lines, GridLayoutManager.HORIZONTAL, false));
@@ -191,7 +194,7 @@ public class TransformersLayout<T> extends LinearLayout {
      */
     @Override
     protected void onAttachedToWindow() {
-        Log.e(TAG, "----------onAttachedToWindow()");
+//        Log.e(TAG, "----------onAttachedToWindow()");
         super.onAttachedToWindow();
 //        attached = true;
         if (savedState != null) {
@@ -205,7 +208,7 @@ public class TransformersLayout<T> extends LinearLayout {
      */
     @Override
     protected void onDetachedFromWindow() {
-        Log.e(TAG, "----------onDetachedFromWindow()");
+//        Log.e(TAG, "----------onDetachedFromWindow()");
         super.onDetachedFromWindow();
 //        attached = false;
         savedState = layoutManager.onSaveInstanceState();
@@ -231,7 +234,7 @@ public class TransformersLayout<T> extends LinearLayout {
         scrollBar.setScrollBySelf(true);
         if (recyclerView != null) {
             if (recyclerView.computeHorizontalScrollOffset() > 0) {
-                Log.e(TAG, "----------scrollToStart()");
+//                Log.e(TAG, "----------scrollToStart()");
                 if (smooth) {
                     recyclerView.smoothScrollToPosition(0);
                 } else {

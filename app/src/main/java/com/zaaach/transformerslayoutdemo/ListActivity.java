@@ -1,5 +1,6 @@
 package com.zaaach.transformerslayoutdemo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -34,13 +35,16 @@ public class ListActivity extends AppCompatActivity {
 
         final List<Nav> navList = DataFactory.loadData();
         final TransformersLayout<Nav> header = new TransformersLayout<>(this);
+        //使用options配置会覆盖xml的属性
         TransformersOptions options = new TransformersOptions.Builder()
                 .lines(2)
                 .spanCount(5)
                 .scrollBarWidth(Util.dp2px(this, 40))
-                .scrollBarHeight(Util.dp2px(this, 3))
-                .scrollBarRadius(Util.dp2px(this, 3) / 2f)
+                .scrollBarHeight(Util.dp2px(this, 40))
+                .scrollBarRadius(Util.dp2px(this, 40))/*Util.dp2px(this, 3) / 2f*/
                 .scrollBarTopMargin(Util.dp2px(this, 6))
+                .scrollBarTrackColor(Color.parseColor("#e5e5e5"))
+                .scrollBarThumbColor(Color.parseColor("#658421"))
                 .build();
         header.apply(options)
                 .addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
