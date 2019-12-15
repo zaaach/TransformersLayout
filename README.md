@@ -149,6 +149,16 @@ header.apply(options)//options可为null
 
 - 修复滚动条颜色配置无效的问题
 
+# About me
+
+掘金主页：[ https://juejin.im/user/56f3dfe8efa6310055ac719f ](https://juejin.im/user/56f3dfe8efa6310055ac719f)
+
+简书主页：[ https://www.jianshu.com/u/913a8bb93d12 ](https://www.jianshu.com/u/913a8bb93d12)
+
+我的淘宝店：[ https://shop238932691.taobao.com ]( https://shop238932691.taobao.com)
+
+:smile:是时候来一波三连了~
+
 # License
 
 ```
