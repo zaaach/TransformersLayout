@@ -87,7 +87,7 @@ public class TransformersLayout<T> extends LinearLayout {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TransformersLayout);
         spanCount = array.getInteger(R.styleable.TransformersLayout_tl_spanCount, DEFAULT_SPAN_COUNT);
         lines = array.getInteger(R.styleable.TransformersLayout_tl_lines, DEFAULT_LINES);
-        scrollBarRadius = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarRadius, dp2px(DEFAULT_SCROLL_BAR_HEIGHT / 2f));
+        scrollBarRadius = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarRadius, -1);
         scrollBarTrackColor = array.getColor(R.styleable.TransformersLayout_tl_scrollbarTrackColor, DEFAULT_TRACK_COLOR);
         scrollBarThumbColor = array.getColor(R.styleable.TransformersLayout_tl_scrollbarThumbColor, DEFAULT_THUMB_COLOR);
         scrollBarTopMargin = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarMarginTop, 0);
@@ -95,6 +95,9 @@ public class TransformersLayout<T> extends LinearLayout {
         scrollBarHeight = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarHeight, dp2px(DEFAULT_SCROLL_BAR_HEIGHT));
         array.recycle();
 
+        if (scrollBarRadius < 0){
+            scrollBarRadius = dp2px(DEFAULT_SCROLL_BAR_HEIGHT) / 2f;
+        }
         if (spanCount <= 0){
             spanCount = DEFAULT_SPAN_COUNT;
         }

@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -59,7 +58,7 @@ public class RecyclerViewScrollBar extends View {
     private final RecyclerView.OnScrollListener mScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-            Log.d(TAG, "---------onScrollStateChanged()");
+//            Log.d(TAG, "---------onScrollStateChanged()");
             if (onTransformersScrollListener != null){
                 onTransformersScrollListener.onScrollStateChanged(recyclerView, newState);
             }
@@ -67,7 +66,7 @@ public class RecyclerViewScrollBar extends View {
 
         @Override
         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-            Log.d(TAG, "---------onScrolled()");
+//            Log.d(TAG, "---------onScrolled()");
             computeScrollScale();
             //如果调用scrollToPosition或smoothScrollToPosition来滚动，不会触发onScrollStateChanged，所以这里再次判断下然后手动回调
             if (scrollBySelf && mRecyclerView.getScrollState() == RecyclerView.SCROLL_STATE_IDLE){
