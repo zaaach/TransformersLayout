@@ -185,7 +185,7 @@ public class TransformersLayout<T> extends LinearLayout {
             scrollBarThumbColor = options.scrollBarThumbColor == 0 ? DEFAULT_THUMB_COLOR : options.scrollBarThumbColor;
 
             if (newLines != lines){
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), lines, GridLayoutManager.HORIZONTAL, false));
+                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), newLines, GridLayoutManager.HORIZONTAL, false));
             }
             setupScrollBar();
         }
