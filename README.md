@@ -16,7 +16,7 @@
 # Preview
 ![gif](https://github.com/zaaach/TransformersLayout/raw/master/arts/preview2.gif)
 
-[点击下载APK体验](https://github.com/zaaach/TransformersLayout/raw/master/arts/app-debug-1.0.0.apk)
+[下载APK体验](https://github.com/zaaach/TransformersLayout/raw/master/arts/app-debug.apk)
 
 # Install
 
@@ -144,6 +144,11 @@ header.apply(options)//options可为null
 | tl_scrollbarThumbColor | color \| reference | scrollbar高亮颜色 |
 
 # Change log
+
+2020-1-5
+
+- 修复滚动条突然变长变短的问题
+- 优化默认圆角大小显示效果
 
 2019-12-13 
 
