@@ -106,7 +106,7 @@ public class TransformersLayout<T> extends LinearLayout {
         }
     }
 
-    private void init(Context context) {
+    private void init(final Context context) {
         setOrientation(LinearLayout.VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL);
         setLayoutParams(new LinearLayout.LayoutParams(-1, -2));
@@ -120,9 +120,10 @@ public class TransformersLayout<T> extends LinearLayout {
         if (itemAnimator != null){
             itemAnimator.setChangeDuration(0);
         }
+
+        setupRecyclerView();
         transformersAdapter = new TransformersAdapter<>(context, recyclerView);
         recyclerView.setAdapter(transformersAdapter);
-        setupRecyclerView();
 
         scrollBar = new RecyclerViewScrollBar(context);
         setupScrollBar();
@@ -139,7 +140,6 @@ public class TransformersLayout<T> extends LinearLayout {
             }
         };
         recyclerView.setLayoutManager(layoutManager);
-        transformersAdapter.setSpanCount(spanCount);
     }
 
     private void setupScrollBar() {
@@ -166,7 +166,6 @@ public class TransformersLayout<T> extends LinearLayout {
         if (scrollBar.getVisibility() == VISIBLE) {
             scrollBar.attachRecyclerView(recyclerView);
         }
-//        Log.e(TAG, "----------load()");
     }
 
     public TransformersLayout<T> apply(@Nullable TransformersOptions options){
@@ -181,11 +180,11 @@ public class TransformersLayout<T> extends LinearLayout {
 //            Log.e(TAG, "trackColor = " + options.scrollBarTrackColor);
 //            Log.e(TAG, "thumbColor = " + options.scrollBarThumbColor);
 //            Log.e(TAG, "radius = " + options.scrollBarRadius);
-            scrollBarTrackColor = options.scrollBarTrackColor == 0 ? DEFAULT_TRACK_COLOR : options.scrollBarTrackColor;
-            scrollBarThumbColor = options.scrollBarThumbColor == 0 ? DEFAULT_THUMB_COLOR : options.scrollBarThumbColor;
+            scrollBarTrackColor = options.scrollBarTrackColor == 0 ? scrollBarTrackColor : options.scrollBarTrackColor;
+            scrollBarThumbColor = options.scrollBarThumbColor == 0 ? scrollBarThumbColor : options.scrollBarThumbColor;
 
             if (newLines != lines){
-                recyclerView.setLayoutManager(new GridLayoutManager(getContext(), newLines, GridLayoutManager.HORIZONTAL, false));
+                layoutManager.setSpanCount(newLines);
             }
             setupScrollBar();
         }

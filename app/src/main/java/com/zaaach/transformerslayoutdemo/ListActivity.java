@@ -44,7 +44,7 @@ public class ListActivity extends AppCompatActivity {
                 .scrollBarRadius(Util.dp2px(this, 4) / 2)
                 .scrollBarTopMargin(Util.dp2px(this, 6))
                 .scrollBarTrackColor(Color.parseColor("#e5e5e5"))
-                .scrollBarThumbColor(Color.parseColor("#658421"))
+//                .scrollBarThumbColor(Color.parseColor("#658421"))
                 .build();
         header.apply(options)
                 .addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
@@ -82,6 +82,7 @@ public class ListActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        navList.remove(0);
                         header.notifyDataChanged(navList);
                         refreshLayout.setRefreshing(false);
                     }

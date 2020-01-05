@@ -13,8 +13,10 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.zaaach.transformerslayout.adapter.TransformersAdapter;
 import com.zaaach.transformerslayout.listener.OnTransformersScrollListener;
 
 /**
@@ -152,21 +154,25 @@ public class RecyclerViewScrollBar extends View {
         //RecyclerView已显示宽度
         float mScrollExtent = mRecyclerView.computeHorizontalScrollExtent();
         //RecyclerView实际宽度
-        float mScrollRange = mRecyclerView.computeHorizontalScrollRange();
+        //fixme: 当gridlayoutmanager为横向并且spancount>1、最后一列数据未填满时，该方法返回值会变；暂时手动计算解决
+//        float mScrollRange = mRecyclerView.computeHorizontalScrollRange();
+        float mScrollRange = getScrollRange();
         if (mScrollRange != 0){
             mThumbScale = mScrollExtent / mScrollRange;
         }
 
+        //RecyclerView可以滚动的距离
+        float canScrollDistance = mScrollRange - mScrollExtent;
+
         //RecyclerView已经滚动的距离
         float mScrollOffset = mRecyclerView.computeHorizontalScrollOffset();
+        //scrollOffset有时会超出可滚动距离
+        mScrollOffset = mScrollOffset >= canScrollDistance ? canScrollDistance : mScrollOffset;
         if (mScrollRange != 0){
             mScrollScale = mScrollOffset / mScrollRange;
         }
-
-        //RecyclerView可以滚动的距离
-        float canScrollDistance = mScrollRange - mScrollExtent;
-//        Log.d(TAG, "---------mScrollExtent = " + mScrollExtent);
-//        Log.d(TAG, "---------mScrollRange = " + mScrollRange);
+//        Log.e(TAG, "---------mScrollExtent = " + mScrollExtent);
+//        Log.e(TAG, "---------mScrollRange = " + mScrollRange);
 //        Log.d(TAG, "---------mScrollOffset = " + mScrollOffset);
 //        Log.d(TAG, "---------canScrollDistance = " + canScrollDistance);
 //        Log.d(TAG, "---------mThumbScale = " + mThumbScale);
@@ -180,6 +186,26 @@ public class RecyclerViewScrollBar extends View {
             mScrollLocation = SCROLL_LOCATION_MIDDLE;
         }
         postInvalidate();
+    }
+
+    private float getScrollRange(){
+        float range = 0;
+        if (mRecyclerView != null){
+            int count = 0;
+            int lines = 1;
+            int itemWidth = 0;
+            RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+            if (adapter instanceof TransformersAdapter){
+                count = adapter.getItemCount();
+                itemWidth = ((TransformersAdapter) adapter).getItemWidth();
+            }
+            RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
+            if (manager instanceof GridLayoutManager){
+                lines = ((GridLayoutManager) manager).getSpanCount();
+            }
+            range = (int)Math.ceil(1.0*count / lines) * itemWidth;
+        }
+        return range;
     }
 
     @Override
