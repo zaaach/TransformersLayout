@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,6 +22,7 @@ import com.zaaach.transformerslayout.listener.OnTransformersItemClickListener;
 import com.zaaach.transformerslayout.listener.OnTransformersScrollListener;
 import com.zaaach.transformerslayout.view.RecyclerViewScrollBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,16 +53,17 @@ public class TransformersLayout<T> extends LinearLayout {
     private int scrollBarTopMargin;
     private int scrollBarWidth;
     private int scrollBarHeight;
+    private boolean pagingMode;
     private OnTransformersItemClickListener onTransformersItemClickListener;
 
     private RecyclerView recyclerView;
     private RecyclerViewScrollBar scrollBar;
     private OnTransformersScrollListener onScrollListener;
 
+    private List<T> mDataList;
     private TransformersAdapter<T> transformersAdapter;
     private GridLayoutManager layoutManager;
     private Parcelable savedState;//保存的滚动状态
-//    private boolean attached;
 
     public TransformersLayout(Context context) {
         this(context, null);
@@ -121,7 +124,13 @@ public class TransformersLayout<T> extends LinearLayout {
             itemAnimator.setChangeDuration(0);
         }
 
-        setupRecyclerView();
+        layoutManager = new GridLayoutManager(getContext(), lines, GridLayoutManager.HORIZONTAL, false){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        recyclerView.setLayoutManager(layoutManager);
         transformersAdapter = new TransformersAdapter<>(context, recyclerView);
         recyclerView.setAdapter(transformersAdapter);
 
@@ -130,16 +139,6 @@ public class TransformersLayout<T> extends LinearLayout {
 
         addView(recyclerView);
         addView(scrollBar);
-    }
-
-    private void setupRecyclerView() {
-        layoutManager = new GridLayoutManager(getContext(), lines, GridLayoutManager.HORIZONTAL, false){
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        recyclerView.setLayoutManager(layoutManager);
     }
 
     private void setupScrollBar() {
@@ -157,15 +156,90 @@ public class TransformersLayout<T> extends LinearLayout {
         return this;
     }
 
-    public void load(List<T> data, TransformersHolderCreator<T> creator){
+    public void load(@NonNull List<T> data, TransformersHolderCreator<T> creator){
+        if (pagingMode){
+            rearrange(data);
+        }else {
+            fillData(data);
+        }
         transformersAdapter.setOnTransformersItemClickListener(onTransformersItemClickListener);
         transformersAdapter.setHolderCreator(creator);
         transformersAdapter.setSpanCount(spanCount);
-        transformersAdapter.setData(data);
+        transformersAdapter.setData(mDataList);
         toggleScrollBar(data);
         if (scrollBar.getVisibility() == VISIBLE) {
             scrollBar.attachRecyclerView(recyclerView);
         }
+    }
+
+    /**
+     * 重新排列数据，使数据转换成分页模式
+     * 原始数据：
+     * 1 3 5 7 9   11 13 15
+     * 2 4 6 8 10  12 14 16
+     * ==============================
+     * 转换之后：（数据会增加null值）
+     * 1 2 3 4 5   11 12 13 14 15
+     * 6 7 8 9 10  16 null...
+     */
+    private void rearrange(List<T> data) {
+        if (data == null || data.isEmpty()) return;
+        List<List<T>> splitList = new ArrayList<>();
+        int size = data.size();
+        int toIndex = spanCount;
+        for (int i = 0; i < size; i += spanCount) {
+            if (i + spanCount > size){
+                toIndex = size - i;
+            }
+            List<T> split = data.subList(i, i + toIndex);
+            splitList.add(split);
+        }
+
+        List<List<T>> rowList = new ArrayList<>();
+        for (int i = 0; i < lines; i++) {
+            List<T> row = new ArrayList<>();
+            for (int j = i; j < splitList.size(); j += lines) {
+                row.addAll(splitList.get(j));
+            }
+            rowList.add(row);
+        }
+
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < rowList.get(0).size(); i++) {
+            result.add(rowList.get(0).get(i));
+            for (int j = 0; j < rowList.size() - 1; j++) {
+                if (i > rowList.get(j+1).size() - 1){
+                    result.add(null);
+                }else {
+                    result.add(rowList.get(j+1).get(i));
+                }
+            }
+        }
+
+        mDataList = result;
+    }
+
+    /**
+     * 默认排序时如果数据大于一页，使用空数据填满最后一列，用于修复滚动条滑动时变长变短的问题
+     * @param data
+     */
+    private void fillData(@NonNull List<T> data) {
+        mDataList = data;
+        if (mDataList.isEmpty()) return;
+        if (mDataList.size() > lines * spanCount && mDataList.size() % lines > 0){
+            int left = lines - mDataList.size() % lines;
+            for (int i = 0; i < left; i++) {
+                mDataList.add(null);
+            }
+        }
+    }
+
+    /**
+     * 获取列表数据
+     * @return
+     */
+    public List<T> getDataList(){
+        return mDataList;
     }
 
     public TransformersLayout<T> apply(@Nullable TransformersOptions options){
@@ -176,6 +250,7 @@ public class TransformersLayout<T> extends LinearLayout {
             scrollBarHeight = options.scrollBarHeight <= 0 ? scrollBarHeight : options.scrollBarHeight;
             scrollBarRadius = options.scrollBarRadius < 0 ? scrollBarHeight/2f : options.scrollBarRadius;
             scrollBarTopMargin = options.scrollBarTopMargin <= 0 ? scrollBarTopMargin : options.scrollBarTopMargin;
+            pagingMode = options.pagingMode;
 
 //            Log.e(TAG, "trackColor = " + options.scrollBarTrackColor);
 //            Log.e(TAG, "thumbColor = " + options.scrollBarThumbColor);
@@ -196,9 +271,7 @@ public class TransformersLayout<T> extends LinearLayout {
      */
     @Override
     protected void onAttachedToWindow() {
-//        Log.e(TAG, "----------onAttachedToWindow()");
         super.onAttachedToWindow();
-//        attached = true;
         if (savedState != null) {
             layoutManager.onRestoreInstanceState(savedState);
         }
@@ -210,15 +283,18 @@ public class TransformersLayout<T> extends LinearLayout {
      */
     @Override
     protected void onDetachedFromWindow() {
-//        Log.e(TAG, "----------onDetachedFromWindow()");
         super.onDetachedFromWindow();
-//        attached = false;
         savedState = layoutManager.onSaveInstanceState();
     }
 
     public void notifyDataChanged(List<T> data){
         if (transformersAdapter != null){
-            transformersAdapter.setData(data);
+            if (pagingMode){
+                rearrange(data);
+            }else {
+                fillData(data);
+            }
+            transformersAdapter.setData(mDataList);
             scrollToStart();
         }
         toggleScrollBar(data);
@@ -236,7 +312,6 @@ public class TransformersLayout<T> extends LinearLayout {
         scrollBar.setScrollBySelf(true);
         if (recyclerView != null) {
             if (recyclerView.computeHorizontalScrollOffset() > 0) {
-//                Log.e(TAG, "----------scrollToStart()");
                 if (smooth) {
                     recyclerView.smoothScrollToPosition(0);
                 } else {

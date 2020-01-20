@@ -39,9 +39,10 @@ public class ListActivity extends AppCompatActivity {
         TransformersOptions options = new TransformersOptions.Builder()
                 .lines(2)
                 .spanCount(5)
-                .scrollBarWidth(Util.dp2px(this, 40))
+                .pagingMode(true)
+                .scrollBarWidth(Util.dp2px(this, 48))
                 .scrollBarHeight(Util.dp2px(this, 4))
-                .scrollBarRadius(Util.dp2px(this, 4) / 2)
+                .scrollBarRadius(Util.dp2px(this, 4) / 2f)
                 .scrollBarTopMargin(Util.dp2px(this, 6))
                 .scrollBarTrackColor(Color.parseColor("#e5e5e5"))
 //                .scrollBarThumbColor(Color.parseColor("#658421"))
@@ -50,7 +51,7 @@ public class ListActivity extends AppCompatActivity {
                 .addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
-                        Toast.makeText(getApplication(), "点击：" + navList.get(position).getText() + "，位置" + position, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplication(), "点击：" + header.getDataList().get(position).getText() + "，position=" + position, Toast.LENGTH_SHORT).show();
                     }
                 })
                 .load(navList, new TransformersHolderCreator<Nav>() {

@@ -4,7 +4,10 @@ import android.content.Context;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 /**
  * @Author: Zaaach
@@ -20,5 +23,5 @@ public abstract class Holder<T> extends RecyclerView.ViewHolder {
 
     protected abstract void initView(View itemView);
 
-    public abstract void bindData(Context context, T data);
+    public abstract void onBind(Context context, List<T> list, @Nullable T data, int position);
 }

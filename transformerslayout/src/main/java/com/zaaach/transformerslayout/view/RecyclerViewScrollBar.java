@@ -13,10 +13,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.zaaach.transformerslayout.adapter.TransformersAdapter;
 import com.zaaach.transformerslayout.listener.OnTransformersScrollListener;
 
 /**
@@ -154,9 +152,7 @@ public class RecyclerViewScrollBar extends View {
         //RecyclerView已显示宽度
         float mScrollExtent = mRecyclerView.computeHorizontalScrollExtent();
         //RecyclerView实际宽度
-        //fixme: 当gridlayoutmanager为横向并且spancount>1、最后一列数据未填满时，该方法返回值会变；暂时手动计算解决
-//        float mScrollRange = mRecyclerView.computeHorizontalScrollRange();
-        float mScrollRange = getScrollRange();
+        float mScrollRange = mRecyclerView.computeHorizontalScrollRange();
         if (mScrollRange != 0){
             mThumbScale = mScrollExtent / mScrollRange;
         }
@@ -188,25 +184,25 @@ public class RecyclerViewScrollBar extends View {
         postInvalidate();
     }
 
-    private float getScrollRange(){
-        float range = 0;
-        if (mRecyclerView != null){
-            int count = 0;
-            int lines = 1;
-            int itemWidth = 0;
-            RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
-            if (adapter instanceof TransformersAdapter){
-                count = adapter.getItemCount();
-                itemWidth = ((TransformersAdapter) adapter).getItemWidth();
-            }
-            RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
-            if (manager instanceof GridLayoutManager){
-                lines = ((GridLayoutManager) manager).getSpanCount();
-            }
-            range = (int)Math.ceil(1.0*count / lines) * itemWidth;
-        }
-        return range;
-    }
+//    private float getScrollRange(){
+//        float range = 0;
+//        if (mRecyclerView != null){
+//            int count = 0;
+//            int lines = 1;
+//            int itemWidth = 0;
+//            RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
+//            if (adapter instanceof TransformersAdapter){
+//                count = adapter.getItemCount();
+//                itemWidth = ((TransformersAdapter) adapter).getItemWidth();
+//            }
+//            RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
+//            if (manager instanceof GridLayoutManager){
+//                lines = ((GridLayoutManager) manager).getSpanCount();
+//            }
+//            range = (int)Math.ceil(1.0*count / lines) * itemWidth;
+//        }
+//        return range;
+//    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

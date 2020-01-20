@@ -27,7 +27,6 @@ public class TransformersAdapter<T> extends RecyclerView.Adapter<Holder<T>> {
     private RecyclerView mRecyclerView;
     private int spanCount;
     private OnTransformersItemClickListener onTransformersItemClickListener;
-    private int itemWidth;
 
     public void setOnTransformersItemClickListener(OnTransformersItemClickListener listener) {
         this.onTransformersItemClickListener = listener;
@@ -41,10 +40,6 @@ public class TransformersAdapter<T> extends RecyclerView.Adapter<Holder<T>> {
     public void setData(List<T> data){
         mData = data;
         notifyDataSetChanged();
-    }
-
-    public int getItemWidth() {
-        return itemWidth;
     }
 
     public void setSpanCount(int spanCount){
@@ -62,22 +57,31 @@ public class TransformersAdapter<T> extends RecyclerView.Adapter<Holder<T>> {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         //每个item平分整个屏幕的宽度
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-        itemWidth = mRecyclerView.getMeasuredWidth() / spanCount;
-        params.width = itemWidth;
+        params.width = mRecyclerView.getMeasuredWidth() / spanCount;
         return holderCreator.createHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final Holder<T> holder, final int position) {
+        if (mData.get(position) == null){
+            holder.itemView.setVisibility(View.INVISIBLE);
+        }else {
+            holder.itemView.setVisibility(View.VISIBLE);
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onTransformersItemClickListener != null){
-                    onTransformersItemClickListener.onItemClick(position);
+                if (mData.get(position) != null) {
+                    if (onTransformersItemClickListener != null) {
+                        onTransformersItemClickListener.onItemClick(position);
+                    }
                 }
+//                else {
+//                    Log.e("adapter", "-------点击位置：" + position);
+//                }
             }
         });
-        holder.bindData(mContext, mData.get(position));
+        holder.onBind(mContext, mData, mData.get(position), position);
     }
 
     @Override

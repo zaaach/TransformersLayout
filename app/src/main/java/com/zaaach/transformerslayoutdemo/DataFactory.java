@@ -32,7 +32,7 @@ public class DataFactory {
         navs.add(new Nav(R.mipmap.ic_nav_order, "订单", "https://c-ssl.duitang.com/uploads/item/201911/25/20191125172705_zzyP2.png"));
         navs.add(new Nav(R.mipmap.ic_nav_service, "客服", "https://c-ssl.duitang.com/uploads/item/201911/25/20191125172705_Wuun5.png"));
         navs.add(new Nav(R.mipmap.ic_nav_shopping, "商城", "https://c-ssl.duitang.com/uploads/item/201911/25/20191125172730_VnmYC.png"));
-        navs.add(new Nav(R.mipmap.ic_nav_stock, "库存", "https://c-ssl.duitang.com/uploads/item/201911/25/20191125172730_iSTcz.png"));
+//        navs.add(new Nav(R.mipmap.ic_nav_stock, "库存", "https://c-ssl.duitang.com/uploads/item/201911/25/20191125172730_iSTcz.png"));
         return navs;
     }
 }

@@ -18,6 +18,7 @@ public class TransformersOptions {
     public final int scrollBarTrackColor;
     public final int scrollBarThumbColor;
     public final float scrollBarRadius;
+    public final boolean pagingMode;
 
     private TransformersOptions(Builder builder) {
         spanCount = builder.spanCount;
@@ -28,6 +29,7 @@ public class TransformersOptions {
         scrollBarTrackColor = builder.scrollBarTrackColor;
         scrollBarThumbColor = builder.scrollBarThumbColor;
         scrollBarRadius = builder.scrollBarRadius;
+        pagingMode = builder.pagingMode;
     }
 
     public static class Builder{
@@ -39,6 +41,12 @@ public class TransformersOptions {
         private int scrollBarTrackColor;
         private int scrollBarThumbColor;
         private float scrollBarRadius = -1;
+        private boolean pagingMode;
+
+        public Builder pagingMode(boolean paging){
+            this.pagingMode = paging;
+            return this;
+        }
 
         public Builder scrollBarRadius(@Px float radius) {
             this.scrollBarRadius = radius;

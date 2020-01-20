@@ -6,10 +6,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.zaaach.transformerslayout.holder.Holder;
+
+import java.util.List;
 
 /**
  * @Author: Zaaach
@@ -32,7 +35,8 @@ public class NavAdapterViewHolder extends Holder<Nav> {
     }
 
     @Override
-    public void bindData(Context context, Nav data) {
+    public void onBind(Context context, List<Nav> list, @Nullable Nav data, int position) {
+        if (data == null) return;
         text.setText(data.getText());
 //        icon.setImageResource(data.getIcon());
         Glide.with(context)
