@@ -162,8 +162,8 @@ public class RecyclerViewScrollBar extends View {
 
         //RecyclerView已经滚动的距离
         float mScrollOffset = mRecyclerView.computeHorizontalScrollOffset();
-        //scrollOffset有时会超出可滚动距离
-        mScrollOffset = mScrollOffset >= canScrollDistance ? canScrollDistance : mScrollOffset;
+//        //scrollOffset有时会超出可滚动距离
+//        mScrollOffset = mScrollOffset >= canScrollDistance ? canScrollDistance : mScrollOffset;
         if (mScrollRange != 0){
             mScrollScale = mScrollOffset / mScrollRange;
         }
@@ -183,26 +183,6 @@ public class RecyclerViewScrollBar extends View {
         }
         postInvalidate();
     }
-
-//    private float getScrollRange(){
-//        float range = 0;
-//        if (mRecyclerView != null){
-//            int count = 0;
-//            int lines = 1;
-//            int itemWidth = 0;
-//            RecyclerView.Adapter adapter = mRecyclerView.getAdapter();
-//            if (adapter instanceof TransformersAdapter){
-//                count = adapter.getItemCount();
-//                itemWidth = ((TransformersAdapter) adapter).getItemWidth();
-//            }
-//            RecyclerView.LayoutManager manager = mRecyclerView.getLayoutManager();
-//            if (manager instanceof GridLayoutManager){
-//                lines = ((GridLayoutManager) manager).getSpanCount();
-//            }
-//            range = (int)Math.ceil(1.0*count / lines) * itemWidth;
-//        }
-//        return range;
-//    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

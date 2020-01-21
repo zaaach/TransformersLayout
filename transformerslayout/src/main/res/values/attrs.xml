@@ -5,6 +5,8 @@
         <attr name="tl_spanCount" format="integer"/>
         <!--每页几行-->
         <attr name="tl_lines" format="integer"/>
+        <!--分页模式-->
+        <attr name="tl_pagingMode" format="boolean"/>
         <!--滚动条宽度-->
         <attr name="tl_scrollbarWidth" format="dimension|reference"/>
         <!--滚动条高度-->

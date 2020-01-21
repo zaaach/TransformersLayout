@@ -69,7 +69,7 @@ public class ListActivity extends AppCompatActivity {
         RecyclerView rv = findViewById(R.id.rv_main);
         rv.setLayoutManager(new LinearLayoutManager(this));
         List<String> beans = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             beans.add("");
         }
         final ListAdapter adapter = new ListAdapter(beans);
@@ -83,7 +83,9 @@ public class ListActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        navList.remove(0);
+                        if (navList.size() > 0) {
+                            navList.remove(0);
+                        }
                         header.notifyDataChanged(navList);
                         refreshLayout.setRefreshing(false);
                     }

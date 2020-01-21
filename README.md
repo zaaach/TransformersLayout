@@ -10,6 +10,7 @@
 
 - 每页行数、列数可配置
 - 滚动状态自动恢复
+- 支持数据重新排序，类似viewpager的分页模式
 - item布局样式自定义
 - scrollbar样式可配置
 
@@ -54,6 +55,7 @@ dependencies {
     android:background="#ffffff"
     app:tl_spanCount="5"
     app:tl_lines="2"
+    app:tl_pagingMode="true"
     app:tl_scrollbarWidth="72dp"
     app:tl_scrollbarHeight="4dp"
     app:tl_scrollbarRadius="2dp"
@@ -80,7 +82,7 @@ public class NavAdapterViewHolder extends Holder<Nav> {
     }
 
     @Override
-    public void bindData(Context context, Nav data) {
+    public void onBind(Context context, List<T> list, @Nullable Nav data, int position) {
         text.setText(data.getText());
         Glide.with(context)
                 .asBitmap()
@@ -93,7 +95,7 @@ public class NavAdapterViewHolder extends Holder<Nav> {
 }
 ```
 
-**Step 3：** java代码中使用
+**Step 3：** java代码中调用
 
 ```java
 List<Nav> navList = DataFactory.loadData();
@@ -102,6 +104,7 @@ TransformersLayout<Nav> header = findViewById();
 TransformersOptions options = new TransformersOptions.Builder()
         .lines(2)
         .spanCount(5)
+    	.pagingMode(true)
         .scrollBarWidth(Util.dp2px(this, 40))
         .scrollBarHeight(Util.dp2px(this, 3))
         .scrollBarRadius(Util.dp2px(this, 3) / 2f)
@@ -123,7 +126,7 @@ header.apply(options)//options可为null
             }
             @Override
             public int getLayoutId() {
-                return R.layout.item_nav_list;
+                return R.layout.item_nav_list;//第二步使用的布局
             }
         });
 ```
@@ -136,7 +139,8 @@ header.apply(options)//options可为null
 | -------- | ---- | ---- |
 | tl_spanCount | integer | 每页列数，默认5 |
 | tl_lines | integer | 每页行数，默认2 |
-| tl_scrollbarWidth | dimension \| reference | scrollbar宽度，默认36dp |
+| tl_pagingMode | boolean | 分页模式，数据会重新排序，默认false |
+| tl_scrollbarWidth | dimension \| reference | scrollbar宽度，默认48dp |
 | tl_scrollbarHeight | dimension \| reference | scrollbar高度，默认3dp |
 | tl_scrollbarMarginTop | dimension \| reference | scrollbar上间距 |
 | tl_scrollbarRadius | dimension \| reference | scrollbar圆角，默认高度的一半 |
@@ -144,6 +148,12 @@ header.apply(options)//options可为null
 | tl_scrollbarThumbColor | color \| reference | scrollbar高亮颜色 |
 
 # Change log
+
+2020-1-21
+
+- 新方法修复滚动条变长变短问题（很完美）
+- 支持数据重新排序
+- 回调方法变动
 
 2020-1-5
 

@@ -39,7 +39,7 @@ public class TransformersLayout<T> extends LinearLayout {
     /** 默认每页2行 */
     private static final int DEFAULT_LINES      = 2;
     /** 滚动条默认宽度 */
-    private static final int DEFAULT_SCROLL_BAR_WIDTH  = 36;//dp
+    private static final int DEFAULT_SCROLL_BAR_WIDTH  = 48;//dp
     /** 滚动条默认高度 */
     private static final int DEFAULT_SCROLL_BAR_HEIGHT = 3;//dp
     private static final int DEFAULT_TRACK_COLOR = Color.parseColor("#f0f0f0");
@@ -64,6 +64,7 @@ public class TransformersLayout<T> extends LinearLayout {
     private TransformersAdapter<T> transformersAdapter;
     private GridLayoutManager layoutManager;
     private Parcelable savedState;//保存的滚动状态
+    private TransformersOptions transformersOptions;
 
     public TransformersLayout(Context context) {
         this(context, null);
@@ -90,6 +91,7 @@ public class TransformersLayout<T> extends LinearLayout {
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.TransformersLayout);
         spanCount = array.getInteger(R.styleable.TransformersLayout_tl_spanCount, DEFAULT_SPAN_COUNT);
         lines = array.getInteger(R.styleable.TransformersLayout_tl_lines, DEFAULT_LINES);
+        pagingMode = array.getBoolean(R.styleable.TransformersLayout_tl_pagingMode, false);
         scrollBarRadius = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarRadius, -1);
         scrollBarTrackColor = array.getColor(R.styleable.TransformersLayout_tl_scrollbarTrackColor, DEFAULT_TRACK_COLOR);
         scrollBarThumbColor = array.getColor(R.styleable.TransformersLayout_tl_scrollbarThumbColor, DEFAULT_THUMB_COLOR);
@@ -157,11 +159,7 @@ public class TransformersLayout<T> extends LinearLayout {
     }
 
     public void load(@NonNull List<T> data, TransformersHolderCreator<T> creator){
-        if (pagingMode){
-            rearrange(data);
-        }else {
-            fillData(data);
-        }
+        fixData(data);
         transformersAdapter.setOnTransformersItemClickListener(onTransformersItemClickListener);
         transformersAdapter.setHolderCreator(creator);
         transformersAdapter.setSpanCount(spanCount);
@@ -182,9 +180,41 @@ public class TransformersLayout<T> extends LinearLayout {
      * 1 2 3 4 5   11 12 13 14 15
      * 6 7 8 9 10  16 null...
      */
-    private void rearrange(List<T> data) {
-        if (data == null || data.isEmpty()) return;
-        List<List<T>> splitList = new ArrayList<>();
+    private List<T> rearrange(List<T> data) {
+        if (lines <= 1) return data;
+        if (data == null || data.isEmpty()) return data;
+        List<T> destList = new ArrayList<>();
+        int pageSize = lines * spanCount;
+        int size = data.size();
+        //转换后的总数量，包括空数据
+        int sizeAfterTransform;
+        if (size < pageSize) {
+//            sizeAfterTransform = pageSize;
+            sizeAfterTransform = size < spanCount ? size * lines : pageSize;
+        } else if (size % pageSize == 0) {
+            sizeAfterTransform = size;
+        } else {
+//            sizeAfterTransform = (size / pageSize + 1) * pageSize;
+            sizeAfterTransform = size % pageSize < spanCount
+                    ? (size / pageSize) * pageSize + size % pageSize * lines
+                    : (size / pageSize + 1) * pageSize;
+        }
+        //类似置换矩阵
+        for (int i = 0; i < sizeAfterTransform; i++) {
+            int pageIndex = i / pageSize;
+            int columnIndex = (i - pageSize * pageIndex) / lines;
+            int rowIndex = (i - pageSize * pageIndex) % lines;
+            int destIndex = (rowIndex * spanCount + columnIndex) + pageIndex * pageSize;
+
+            if (destIndex >= 0 && destIndex < size) {
+                destList.add(data.get(destIndex));
+            } else {
+                destList.add(null);
+            }
+        }
+
+        //自己瞎捣鼓的方法...和上面的一比惨不忍睹
+        /*List<List<T>> splitList = new ArrayList<>();
         int size = data.size();
         int toIndex = spanCount;
         for (int i = 0; i < size; i += spanCount) {
@@ -204,19 +234,19 @@ public class TransformersLayout<T> extends LinearLayout {
             rowList.add(row);
         }
 
-        List<T> result = new ArrayList<>();
+        List<T> destList = new ArrayList<>();
         for (int i = 0; i < rowList.get(0).size(); i++) {
-            result.add(rowList.get(0).get(i));
+            destList.add(rowList.get(0).get(i));
             for (int j = 0; j < rowList.size() - 1; j++) {
                 if (i > rowList.get(j+1).size() - 1){
-                    result.add(null);
+                    destList.add(null);
                 }else {
-                    result.add(rowList.get(j+1).get(i));
+                    destList.add(rowList.get(j+1).get(i));
                 }
             }
-        }
+        }*/
 
-        mDataList = result;
+        return destList;
     }
 
     /**
@@ -224,8 +254,8 @@ public class TransformersLayout<T> extends LinearLayout {
      * @param data
      */
     private void fillData(@NonNull List<T> data) {
+        if (lines <= 1 || data.isEmpty()) return;
         mDataList = data;
-        if (mDataList.isEmpty()) return;
         if (mDataList.size() > lines * spanCount && mDataList.size() % lines > 0){
             int left = lines - mDataList.size() % lines;
             for (int i = 0; i < left; i++) {
@@ -242,8 +272,13 @@ public class TransformersLayout<T> extends LinearLayout {
         return mDataList;
     }
 
+    public TransformersOptions getOptions(){
+        return transformersOptions;
+    }
+
     public TransformersLayout<T> apply(@Nullable TransformersOptions options){
         if (options != null){
+            transformersOptions = options;
             spanCount = options.spanCount <= 0 ? spanCount : options.spanCount;
             int newLines = options.lines <= 0 ? lines : options.lines;
             scrollBarWidth = options.scrollBarWidth <= 0 ? scrollBarWidth : options.scrollBarWidth;
@@ -289,11 +324,7 @@ public class TransformersLayout<T> extends LinearLayout {
 
     public void notifyDataChanged(List<T> data){
         if (transformersAdapter != null){
-            if (pagingMode){
-                rearrange(data);
-            }else {
-                fillData(data);
-            }
+            fixData(data);
             transformersAdapter.setData(mDataList);
             scrollToStart();
         }
@@ -301,6 +332,14 @@ public class TransformersLayout<T> extends LinearLayout {
         //数据发生改变时重新计算滚动比例
         if (scrollBar.getVisibility() == VISIBLE) {
             scrollBar.computeScrollScale();
+        }
+    }
+
+    private void fixData(List<T> data) {
+        if (pagingMode) {
+            mDataList = rearrange(data);
+        } else {
+            fillData(data);
         }
     }
 
