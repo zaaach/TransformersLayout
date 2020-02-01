@@ -163,6 +163,8 @@ public class TransformersLayout<T> extends LinearLayout {
         transformersAdapter.setOnTransformersItemClickListener(onTransformersItemClickListener);
         transformersAdapter.setHolderCreator(creator);
         transformersAdapter.setSpanCount(spanCount);
+        //如果数据少于一页的列数
+        resetOneLine();
         transformersAdapter.setData(mDataList);
         toggleScrollBar(data);
         if (scrollBar.getVisibility() == VISIBLE) {
@@ -183,9 +185,13 @@ public class TransformersLayout<T> extends LinearLayout {
     private List<T> rearrange(List<T> data) {
         if (lines <= 1) return data;
         if (data == null || data.isEmpty()) return data;
-        List<T> destList = new ArrayList<>();
         int pageSize = lines * spanCount;
         int size = data.size();
+        //如果数据少于一行
+        if (size <= spanCount){
+            return new ArrayList<>(data);
+        }
+        List<T> destList = new ArrayList<>();
         //转换后的总数量，包括空数据
         int sizeAfterTransform;
         if (size < pageSize) {
@@ -254,11 +260,11 @@ public class TransformersLayout<T> extends LinearLayout {
      * @param data
      */
     private void fillData(@NonNull List<T> data) {
-        if (lines <= 1 || data.isEmpty()) return;
-        mDataList = data;
+        if (lines <= 1) return;
+        mDataList = new ArrayList<>(data);
         if (mDataList.size() > lines * spanCount && mDataList.size() % lines > 0){
-            int left = lines - mDataList.size() % lines;
-            for (int i = 0; i < left; i++) {
+            int rest = lines - mDataList.size() % lines;
+            for (int i = 0; i < rest; i++) {
                 mDataList.add(null);
             }
         }
@@ -294,6 +300,7 @@ public class TransformersLayout<T> extends LinearLayout {
             scrollBarThumbColor = options.scrollBarThumbColor == 0 ? scrollBarThumbColor : options.scrollBarThumbColor;
 
             if (newLines != lines){
+                lines = newLines;
                 layoutManager.setSpanCount(newLines);
             }
             setupScrollBar();
@@ -325,6 +332,7 @@ public class TransformersLayout<T> extends LinearLayout {
     public void notifyDataChanged(List<T> data){
         if (transformersAdapter != null){
             fixData(data);
+            resetOneLine();
             transformersAdapter.setData(mDataList);
             scrollToStart();
         }
@@ -332,6 +340,14 @@ public class TransformersLayout<T> extends LinearLayout {
         //数据发生改变时重新计算滚动比例
         if (scrollBar.getVisibility() == VISIBLE) {
             scrollBar.computeScrollScale();
+        }
+    }
+
+    private void resetOneLine() {
+        //如果数据少于一页的列数
+        if (pagingMode && mDataList.size() <= spanCount){
+            lines = 1;
+            layoutManager.setSpanCount(1);
         }
     }
 

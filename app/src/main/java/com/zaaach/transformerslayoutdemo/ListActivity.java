@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -35,6 +36,25 @@ public class ListActivity extends AppCompatActivity {
 
         final List<Nav> navList = DataFactory.loadData();
         final TransformersLayout<Nav> header = new TransformersLayout<>(this);
+        header.addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        Toast.makeText(getApplication(), "点击：" + header.getDataList().get(position).getText(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .load(navList, new TransformersHolderCreator<Nav>() {
+                    @Override
+                    public Holder<Nav> createHolder(View itemView) {
+                        return new NavAdapterViewHolder(itemView);
+                    }
+
+                    @Override
+                    public int getLayoutId() {
+                        return R.layout.item_nav_list;
+                    }
+                });
+
+        final TransformersLayout<Nav> header2 = new TransformersLayout<>(this);
         //使用options配置会覆盖xml的属性
         TransformersOptions options = new TransformersOptions.Builder()
                 .lines(2)
@@ -47,11 +67,11 @@ public class ListActivity extends AppCompatActivity {
                 .scrollBarTrackColor(Color.parseColor("#e5e5e5"))
 //                .scrollBarThumbColor(Color.parseColor("#658421"))
                 .build();
-        header.apply(options)
+        header2.apply(options)
                 .addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
-                        Toast.makeText(getApplication(), "点击：" + header.getDataList().get(position).getText() + "，position=" + position, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplication(), "点击：" + header2.getDataList().get(position).getText(), Toast.LENGTH_SHORT).show();
                     }
                 })
                 .load(navList, new TransformersHolderCreator<Nav>() {
@@ -69,11 +89,23 @@ public class ListActivity extends AppCompatActivity {
         RecyclerView rv = findViewById(R.id.rv_main);
         rv.setLayoutManager(new LinearLayoutManager(this));
         List<String> beans = new ArrayList<>();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 20; i++) {
             beans.add("");
         }
         final ListAdapter adapter = new ListAdapter(beans);
+        int padding = Util.dp2px(this, 8);
+        TextView normal = new TextView(this);
+        normal.setText("默认效果");
+        normal.setTextColor(Color.BLACK);
+        normal.setPadding(padding*2, padding, 0, padding);
+        adapter.addHeaderView(normal);
         adapter.addHeaderView(header);
+        TextView sort = new TextView(this);
+        sort.setText("数据重新排序");
+        sort.setTextColor(Color.BLACK);
+        sort.setPadding(padding*2, padding, 0, padding);
+        adapter.addHeaderView(sort);
+        adapter.addHeaderView(header2);
         rv.setAdapter(adapter);
 
         final SwipeRefreshLayout refreshLayout = findViewById(R.id.refresh_layout);
@@ -87,6 +119,7 @@ public class ListActivity extends AppCompatActivity {
                             navList.remove(0);
                         }
                         header.notifyDataChanged(navList);
+                        header2.notifyDataChanged(navList);
                         refreshLayout.setRefreshing(false);
                     }
                 }, 1000);
