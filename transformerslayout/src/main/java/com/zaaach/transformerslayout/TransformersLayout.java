@@ -51,6 +51,7 @@ public class TransformersLayout<T> extends LinearLayout {
     private int scrollBarTrackColor;
     private int scrollBarThumbColor;
     private int scrollBarTopMargin;
+    private int scrollBarBottomMargin;
     private int scrollBarWidth;
     private int scrollBarHeight;
     private boolean pagingMode;
@@ -96,6 +97,7 @@ public class TransformersLayout<T> extends LinearLayout {
         scrollBarTrackColor = array.getColor(R.styleable.TransformersLayout_tl_scrollbarTrackColor, DEFAULT_TRACK_COLOR);
         scrollBarThumbColor = array.getColor(R.styleable.TransformersLayout_tl_scrollbarThumbColor, DEFAULT_THUMB_COLOR);
         scrollBarTopMargin = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarMarginTop, 0);
+        scrollBarBottomMargin = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollBarMarginBottom, 0);
         scrollBarWidth = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarWidth, dp2px(DEFAULT_SCROLL_BAR_WIDTH));
         scrollBarHeight = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarHeight, dp2px(DEFAULT_SCROLL_BAR_HEIGHT));
         array.recycle();
@@ -146,6 +148,7 @@ public class TransformersLayout<T> extends LinearLayout {
     private void setupScrollBar() {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(scrollBarWidth, scrollBarHeight);
         params.topMargin = scrollBarTopMargin;
+        params.bottomMargin = scrollBarBottomMargin;
         scrollBar.setLayoutParams(params);
         scrollBar.setTrackColor(scrollBarTrackColor)
                 .setThumbColor(scrollBarThumbColor)

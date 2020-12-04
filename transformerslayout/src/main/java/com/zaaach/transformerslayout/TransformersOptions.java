@@ -15,6 +15,7 @@ public class TransformersOptions {
     public final int scrollBarWidth;
     public final int scrollBarHeight;
     public final int scrollBarTopMargin;
+    public final int scrollBarBottomMargin;
     public final int scrollBarTrackColor;
     public final int scrollBarThumbColor;
     public final float scrollBarRadius;
@@ -26,6 +27,7 @@ public class TransformersOptions {
         scrollBarWidth = builder.scrollBarWidth;
         scrollBarHeight = builder.scrollBarHeight;
         scrollBarTopMargin = builder.scrollBarTopMargin;
+        scrollBarBottomMargin = builder.scrollBarBottomMargin;
         scrollBarTrackColor = builder.scrollBarTrackColor;
         scrollBarThumbColor = builder.scrollBarThumbColor;
         scrollBarRadius = builder.scrollBarRadius;
@@ -38,6 +40,7 @@ public class TransformersOptions {
         private int scrollBarWidth;
         private int scrollBarHeight;
         private int scrollBarTopMargin;
+        private int scrollBarBottomMargin;
         private int scrollBarTrackColor;
         private int scrollBarThumbColor;
         private float scrollBarRadius = -1;
@@ -65,6 +68,11 @@ public class TransformersOptions {
 
         public Builder scrollBarTopMargin(@Px int topMargin){
             scrollBarTopMargin = topMargin;
+            return this;
+        }
+
+        public Builder scrollBarBottomMargin(@Px int bottomMargin){
+            scrollBarBottomMargin = bottomMargin;
             return this;
         }
 

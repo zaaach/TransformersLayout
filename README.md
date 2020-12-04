@@ -60,6 +60,7 @@ dependencies {
     app:tl_scrollbarHeight="4dp"
     app:tl_scrollbarRadius="2dp"
     app:tl_scrollbarMarginTop="6dp"
+    app:tl_scrollbarMarginBottom="6dp"
     app:tl_scrollbarTrackColor="#f0f0f0"
     app:tl_scrollbarThumbColor="#FFC107"/>
 ```
@@ -109,6 +110,7 @@ TransformersOptions options = new TransformersOptions.Builder()
         .scrollBarHeight(Util.dp2px(this, 3))
         .scrollBarRadius(Util.dp2px(this, 3) / 2f)
         .scrollBarTopMargin(Util.dp2px(this, 6))
+    	.scrollBarBottomMargin(Util.dp2px(this, 6))
     	.scrollBarTrackColor(Color.parseColor("#e5e5e5"))
         .scrollBarThumbColor(Color.parseColor("#658421"))
         .build();
@@ -143,23 +145,28 @@ header.apply(options)//options可为null
 | tl_scrollbarWidth | dimension \| reference | scrollbar宽度，默认48dp |
 | tl_scrollbarHeight | dimension \| reference | scrollbar高度，默认3dp |
 | tl_scrollbarMarginTop | dimension \| reference | scrollbar上间距 |
+| tl_scrollbarMarginBottom | dimension \| reference | scrollbar下间距 |
 | tl_scrollbarRadius | dimension \| reference | scrollbar圆角，默认高度的一半 |
 | tl_scrollbarTrackColor | color \| reference | scrollbar轨道颜色 |
 | tl_scrollbarThumbColor | color \| reference | scrollbar高亮颜色 |
 
 # Change log
 
-2020-2-1
+2020-12-04
+
+- 增加scrollbar下间距属性
+
+2020-02-01
 
 - 修复数据更新问题
 
-2020-1-21
+2020-01-21
 
 - 新方法修复滚动条变长变短问题（很完美）
 - 支持数据重新排序
 - 回调方法变动
 
-2020-1-5
+2020-01-05
 
 - 修复滚动条突然变长变短的问题
 - 优化默认圆角大小显示效果
@@ -170,18 +177,20 @@ header.apply(options)//options可为null
 
 # About me
 
-掘金主页：[ https://juejin.im/user/56f3dfe8efa6310055ac719f ](https://juejin.im/user/56f3dfe8efa6310055ac719f)
+掘金：[ https://juejin.im/user/56f3dfe8efa6310055ac719f ](https://juejin.im/user/56f3dfe8efa6310055ac719f)
 
-简书主页：[ https://www.jianshu.com/u/913a8bb93d12 ](https://www.jianshu.com/u/913a8bb93d12)
+简书：[ https://www.jianshu.com/u/913a8bb93d12 ](https://www.jianshu.com/u/913a8bb93d12)
 
-我的淘宝店：[ https://shop238932691.taobao.com ]( https://shop238932691.taobao.com)
+淘宝店：[ LEON家居生活馆 （动漫摆件）]( https://shop238932691.taobao.com)
 
-:smile:是时候来一波三连了~
+![LEON](https://raw.githubusercontent.com/zaaach/imgbed/master/arts/leon_shop_qrcode.png)
+
+:wink:淘宝店求个关注:wink:
 
 # License
 
 ```
-Copyright (c) 2019 zaaach
+Copyright (c) 2020 zaaach
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

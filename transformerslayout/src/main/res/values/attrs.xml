@@ -13,6 +13,8 @@
         <attr name="tl_scrollbarHeight" format="dimension|reference"/>
         <!--滚动条上间距-->
         <attr name="tl_scrollbarMarginTop" format="dimension|reference"/>
+        <!--滚动条下间距-->
+        <attr name="tl_scrollBarMarginBottom" format="dimension|reference"/>
         <!--滚动条圆角-->
         <attr name="tl_scrollbarRadius" format="dimension|reference"/>
         <!--滚动条轨道颜色-->
