@@ -36,6 +36,10 @@ public class ListActivity extends AppCompatActivity {
 
         final List<Nav> navList = DataFactory.loadData();
         final TransformersLayout<Nav> header = new TransformersLayout<>(this);
+        RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(-1, -2);
+        params.leftMargin = Util.dp2px(this, 16);
+        params.rightMargin = Util.dp2px(this, 16);
+        header.setLayoutParams(params);
         header.addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
@@ -54,10 +58,11 @@ public class ListActivity extends AppCompatActivity {
                     }
                 });
 
+        final List<Nav> navList2 = DataFactory.loadSmallData();
         final TransformersLayout<Nav> header2 = new TransformersLayout<>(this);
         //使用options配置会覆盖xml的属性
         TransformersOptions options = new TransformersOptions.Builder()
-                .lines(2)
+                .lines(3)
                 .spanCount(5)
                 .pagingMode(true)
                 .scrollBarWidth(Util.dp2px(this, 48))
@@ -74,7 +79,7 @@ public class ListActivity extends AppCompatActivity {
                         Toast.makeText(getApplication(), "点击：" + header2.getDataList().get(position).getText(), Toast.LENGTH_SHORT).show();
                     }
                 })
-                .load(navList, new TransformersHolderCreator<Nav>() {
+                .load(navList2, new TransformersHolderCreator<Nav>() {
                     @Override
                     public Holder<Nav> createHolder(View itemView) {
                         return new NavAdapterViewHolder(itemView);
@@ -117,6 +122,9 @@ public class ListActivity extends AppCompatActivity {
                     public void run() {
                         if (navList.size() > 0) {
                             navList.remove(0);
+                        }
+                        if (navList2.size() > 0) {
+                            navList2.remove(0);
                         }
                         header.notifyDataChanged(navList);
                         header2.notifyDataChanged(navList);

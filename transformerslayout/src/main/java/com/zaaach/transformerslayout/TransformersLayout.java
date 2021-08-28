@@ -6,8 +6,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -137,6 +139,14 @@ public class TransformersLayout<T> extends LinearLayout {
         recyclerView.setLayoutManager(layoutManager);
         transformersAdapter = new TransformersAdapter<>(context, recyclerView);
         recyclerView.setAdapter(transformersAdapter);
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                recyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+//                Log.e(TAG, "rv宽度=" + recyclerView.getWidth());
+                transformersAdapter.onWidthChanged(recyclerView.getWidth());
+            }
+        });
 
         scrollBar = new RecyclerViewScrollBar(context);
         setupScrollBar();
@@ -162,12 +172,13 @@ public class TransformersLayout<T> extends LinearLayout {
     }
 
     public void load(@NonNull List<T> data, TransformersHolderCreator<T> creator){
+        //如果数据少于一页的列数
+        mDataList = data;
+        fixLineCount();
         fixData(data);
         transformersAdapter.setOnTransformersItemClickListener(onTransformersItemClickListener);
         transformersAdapter.setHolderCreator(creator);
         transformersAdapter.setSpanCount(spanCount);
-        //如果数据少于一页的列数
-        resetOneLine();
         transformersAdapter.setData(mDataList);
         toggleScrollBar(data);
         if (scrollBar.getVisibility() == VISIBLE) {
@@ -221,45 +232,11 @@ public class TransformersLayout<T> extends LinearLayout {
                 destList.add(null);
             }
         }
-
-        //自己瞎捣鼓的方法...和上面的一比惨不忍睹
-        /*List<List<T>> splitList = new ArrayList<>();
-        int size = data.size();
-        int toIndex = spanCount;
-        for (int i = 0; i < size; i += spanCount) {
-            if (i + spanCount > size){
-                toIndex = size - i;
-            }
-            List<T> split = data.subList(i, i + toIndex);
-            splitList.add(split);
-        }
-
-        List<List<T>> rowList = new ArrayList<>();
-        for (int i = 0; i < lines; i++) {
-            List<T> row = new ArrayList<>();
-            for (int j = i; j < splitList.size(); j += lines) {
-                row.addAll(splitList.get(j));
-            }
-            rowList.add(row);
-        }
-
-        List<T> destList = new ArrayList<>();
-        for (int i = 0; i < rowList.get(0).size(); i++) {
-            destList.add(rowList.get(0).get(i));
-            for (int j = 0; j < rowList.size() - 1; j++) {
-                if (i > rowList.get(j+1).size() - 1){
-                    destList.add(null);
-                }else {
-                    destList.add(rowList.get(j+1).get(i));
-                }
-            }
-        }*/
-
         return destList;
     }
 
     /**
-     * 默认排序时如果数据大于一页，使用空数据填满最后一列，用于修复滚动条滑动时变长变短的问题
+     * 不排序时如果数据大于一页，使用空数据填满最后一列，用于修复滚动条滑动时变长变短的问题
      * @param data
      */
     private void fillData(@NonNull List<T> data) {
@@ -334,8 +311,8 @@ public class TransformersLayout<T> extends LinearLayout {
 
     public void notifyDataChanged(List<T> data){
         if (transformersAdapter != null){
+            fixLineCount();
             fixData(data);
-            resetOneLine();
             transformersAdapter.setData(mDataList);
             scrollToStart();
         }
@@ -346,11 +323,13 @@ public class TransformersLayout<T> extends LinearLayout {
         }
     }
 
-    private void resetOneLine() {
-        //如果数据少于一页的列数
-        if (pagingMode && mDataList.size() <= spanCount){
-            lines = 1;
-            layoutManager.setSpanCount(1);
+    private void fixLineCount() {
+        //如果总数据少于一页，动态调整行数
+        if (pagingMode){
+            int size = mDataList.size();
+            lines = size % spanCount == 0 ? size / spanCount : size / spanCount + 1;
+            Log.e(TAG, "lines = " + lines);
+            layoutManager.setSpanCount(lines);
         }
     }
 

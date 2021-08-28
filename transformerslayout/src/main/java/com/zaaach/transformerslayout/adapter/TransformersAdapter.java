@@ -25,6 +25,7 @@ public class TransformersAdapter<T> extends RecyclerView.Adapter<Holder<T>> {
     private List<T> mData;
     private TransformersHolderCreator<T> holderCreator;
     private RecyclerView mRecyclerView;
+    private int mWidth;
     private int spanCount;
     private OnTransformersItemClickListener onTransformersItemClickListener;
 
@@ -39,6 +40,11 @@ public class TransformersAdapter<T> extends RecyclerView.Adapter<Holder<T>> {
 
     public void setData(List<T> data){
         mData = data;
+        notifyDataSetChanged();
+    }
+
+    public void onWidthChanged(int width){
+        this.mWidth = width;
         notifyDataSetChanged();
     }
 
@@ -57,7 +63,8 @@ public class TransformersAdapter<T> extends RecyclerView.Adapter<Holder<T>> {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
         //每个item平分整个屏幕的宽度
         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-        params.width = mRecyclerView.getMeasuredWidth() / spanCount;
+        mWidth = mWidth == 0 ? mRecyclerView.getMeasuredWidth() : mWidth;
+        params.width = mWidth / spanCount;
         return holderCreator.createHolder(itemView);
     }
 
@@ -76,9 +83,6 @@ public class TransformersAdapter<T> extends RecyclerView.Adapter<Holder<T>> {
                         onTransformersItemClickListener.onItemClick(position);
                     }
                 }
-//                else {
-//                    Log.e("adapter", "-------点击位置：" + position);
-//                }
             }
         });
         holder.onBind(mContext, mData, mData.get(position), position);
