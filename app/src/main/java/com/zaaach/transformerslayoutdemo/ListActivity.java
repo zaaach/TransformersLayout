@@ -127,7 +127,7 @@ public class ListActivity extends AppCompatActivity {
                             navList2.remove(0);
                         }
                         header.notifyDataChanged(navList);
-                        header2.notifyDataChanged(navList);
+                        header2.notifyDataChanged(navList2);
                         refreshLayout.setRefreshing(false);
                     }
                 }, 1000);

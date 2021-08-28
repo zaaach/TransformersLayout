@@ -175,7 +175,7 @@ public class TransformersLayout<T> extends LinearLayout {
         //如果数据少于一页的列数
         mDataList = data;
         fixLineCount();
-        fixData(data);
+        fixData(mDataList);
         transformersAdapter.setOnTransformersItemClickListener(onTransformersItemClickListener);
         transformersAdapter.setHolderCreator(creator);
         transformersAdapter.setSpanCount(spanCount);
@@ -310,9 +310,10 @@ public class TransformersLayout<T> extends LinearLayout {
     }
 
     public void notifyDataChanged(List<T> data){
+        mDataList = data;
+        fixLineCount();
+        fixData(data);
         if (transformersAdapter != null){
-            fixLineCount();
-            fixData(data);
             transformersAdapter.setData(mDataList);
             scrollToStart();
         }
@@ -325,10 +326,11 @@ public class TransformersLayout<T> extends LinearLayout {
 
     private void fixLineCount() {
         //如果总数据少于一页，动态调整行数
-        if (pagingMode){
-            int size = mDataList.size();
+        int size = mDataList.size();
+        if (size <= spanCount * lines){
             lines = size % spanCount == 0 ? size / spanCount : size / spanCount + 1;
             Log.e(TAG, "lines = " + lines);
+            lines = lines > 0 ? lines : 1;
             layoutManager.setSpanCount(lines);
         }
     }
