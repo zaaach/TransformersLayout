@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -40,9 +41,13 @@ public class RecyclerViewScrollBar extends View {
     private float radius;
     private int mTrackColor;
     private int mThumbColor;
+    private boolean fixedMode;//滑块宽度固定模式
+    private int mThumbWidth;//滑块宽度
 
     private float mThumbScale = 0f;
     private float mScrollScale = 0f;
+    private float canScrollDistance;
+    private float mScrollOffset;
     //当前滚动条位置：起点、滚动中、终点
     private int mScrollLocation = SCROLL_LOCATION_START;
     private boolean scrollBySelf;//是否是调用scrollToPosition或smoothScrollToPosition方法来滚动的
@@ -143,6 +148,16 @@ public class RecyclerViewScrollBar extends View {
         return this;
     }
 
+    public RecyclerViewScrollBar setThumbWidth(int width) {
+        this.mThumbWidth = width;
+        return this;
+    }
+
+    public RecyclerViewScrollBar setThumbFixedMode(boolean fixed) {
+        this.fixedMode = fixed;
+        return this;
+    }
+
     public void applyChange(){
         postInvalidate();
     }
@@ -158,12 +173,10 @@ public class RecyclerViewScrollBar extends View {
         }
 
         //RecyclerView可以滚动的距离
-        float canScrollDistance = mScrollRange - mScrollExtent;
+        canScrollDistance = mScrollRange - mScrollExtent;
 
         //RecyclerView已经滚动的距离
-        float mScrollOffset = mRecyclerView.computeHorizontalScrollOffset();
-//        //scrollOffset有时会超出可滚动距离
-//        mScrollOffset = mScrollOffset >= canScrollDistance ? canScrollDistance : mScrollOffset;
+        mScrollOffset = mRecyclerView.computeHorizontalScrollOffset();
         if (mScrollRange != 0){
             mScrollScale = mScrollOffset / mScrollRange;
         }
@@ -171,8 +184,8 @@ public class RecyclerViewScrollBar extends View {
 //        Log.e(TAG, "---------mScrollRange = " + mScrollRange);
 //        Log.d(TAG, "---------mScrollOffset = " + mScrollOffset);
 //        Log.d(TAG, "---------canScrollDistance = " + canScrollDistance);
-//        Log.d(TAG, "---------mThumbScale = " + mThumbScale);
-//        Log.d(TAG, "---------mScrollScale = " + mScrollScale);
+        Log.d(TAG, "---------mThumbScale = " + mThumbScale);
+        Log.d(TAG, "---------mScrollScale = " + mScrollScale);
 //        Log.d(TAG, "*****************************************");
         if (mScrollOffset == 0){
             mScrollLocation = SCROLL_LOCATION_START;
@@ -202,18 +215,23 @@ public class RecyclerViewScrollBar extends View {
     private void drawThumb(Canvas canvas) {
         initPaint();
         mPaint.setColor(mThumbColor);
-        float left = mScrollScale * mWidth;
-        float right = left + mWidth * mThumbScale;
-        switch (mScrollLocation){
-            case SCROLL_LOCATION_START:
-                mThumbRectF.set(0, 0, right, mHeight);
-                break;
-            case SCROLL_LOCATION_MIDDLE:
-                mThumbRectF.set(left, 0, right, mHeight);
-                break;
-            case SCROLL_LOCATION_END:
-                mThumbRectF.set(left, 0, mWidth, mHeight);
-                break;
+        if (!fixedMode) {
+            float left = mScrollScale * mWidth;
+            float right = left + mWidth * mThumbScale;
+            switch (mScrollLocation) {
+                case SCROLL_LOCATION_START:
+                    mThumbRectF.set(0, 0, right, mHeight);
+                    break;
+                case SCROLL_LOCATION_MIDDLE:
+                    mThumbRectF.set(left, 0, right, mHeight);
+                    break;
+                case SCROLL_LOCATION_END:
+                    mThumbRectF.set(left, 0, mWidth, mHeight);
+                    break;
+            }
+        }else {
+            float left = (mWidth - mThumbWidth) / canScrollDistance * mScrollOffset;
+            mThumbRectF.set(left, 0, left + mThumbWidth, mHeight);
         }
         canvas.drawRoundRect(mThumbRectF, radius, radius, mPaint);
     }

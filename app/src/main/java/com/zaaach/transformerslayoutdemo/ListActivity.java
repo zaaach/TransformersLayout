@@ -58,17 +58,19 @@ public class ListActivity extends AppCompatActivity {
                     }
                 });
 
-        final List<Nav> navList2 = DataFactory.loadSmallData();
+        final List<Nav> navList2 = DataFactory.loadData();
         final TransformersLayout<Nav> header2 = new TransformersLayout<>(this);
         //使用options配置会覆盖xml的属性
         TransformersOptions options = new TransformersOptions.Builder()
-                .lines(3)
+                .lines(2)
                 .spanCount(5)
                 .pagingMode(true)
                 .scrollBarWidth(Util.dp2px(this, 48))
                 .scrollBarHeight(Util.dp2px(this, 4))
                 .scrollBarRadius(Util.dp2px(this, 4) / 2f)
                 .scrollBarTopMargin(Util.dp2px(this, 6))
+                .scrollBarThumbFixedMode(true)
+                .scrollBarThumbWidth(Util.dp2px(this, 12))
                 .scrollBarTrackColor(Color.parseColor("#e5e5e5"))
 //                .scrollBarThumbColor(Color.parseColor("#658421"))
                 .build();

@@ -19,7 +19,11 @@
         <attr name="tl_scrollbarRadius" format="dimension|reference"/>
         <!--滚动条轨道颜色-->
         <attr name="tl_scrollbarTrackColor" format="color|reference"/>
-        <!--滚动条进度颜色-->
+        <!--滚动条滑块颜色-->
         <attr name="tl_scrollbarThumbColor" format="color|reference"/>
+        <!--滚动条滑块宽度固定模式-->
+        <attr name="tl_scrollbarThumbFixedMode" format="boolean"/>
+        <!--滚动条滑块宽度-->
+        <attr name="tl_scrollbarThumbFixedWidth" format="dimension|reference"/>
     </declare-styleable>
 </resources>

@@ -42,6 +42,8 @@ public class TransformersLayout<T> extends LinearLayout {
     private static final int DEFAULT_LINES      = 2;
     /** 滚动条默认宽度 */
     private static final int DEFAULT_SCROLL_BAR_WIDTH  = 48;//dp
+    /** 滚动条滑块宽度 */
+    private static final int DEFAULT_SCROLL_BAR_THUMB_WIDTH  = 20;//dp
     /** 滚动条默认高度 */
     private static final int DEFAULT_SCROLL_BAR_HEIGHT = 3;//dp
     private static final int DEFAULT_TRACK_COLOR = Color.parseColor("#f0f0f0");
@@ -56,6 +58,8 @@ public class TransformersLayout<T> extends LinearLayout {
     private int scrollBarBottomMargin;
     private int scrollBarWidth;
     private int scrollBarHeight;
+    private int scrollBarThumbWidth;
+    private boolean scrollBarThumbFixedMode;
     private boolean pagingMode;
     private OnTransformersItemClickListener onTransformersItemClickListener;
 
@@ -102,6 +106,8 @@ public class TransformersLayout<T> extends LinearLayout {
         scrollBarBottomMargin = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollBarMarginBottom, 0);
         scrollBarWidth = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarWidth, dp2px(DEFAULT_SCROLL_BAR_WIDTH));
         scrollBarHeight = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarHeight, dp2px(DEFAULT_SCROLL_BAR_HEIGHT));
+        scrollBarThumbFixedMode = array.getBoolean(R.styleable.TransformersLayout_tl_scrollbarThumbFixedMode, false);
+        scrollBarThumbWidth = array.getDimensionPixelSize(R.styleable.TransformersLayout_tl_scrollbarThumbFixedWidth, dp2px(DEFAULT_SCROLL_BAR_THUMB_WIDTH));
         array.recycle();
 
         if (scrollBarRadius < 0){
@@ -163,6 +169,8 @@ public class TransformersLayout<T> extends LinearLayout {
         scrollBar.setTrackColor(scrollBarTrackColor)
                 .setThumbColor(scrollBarThumbColor)
                 .setRadius(scrollBarRadius)
+                .setThumbFixedMode(scrollBarThumbFixedMode)
+                .setThumbWidth(scrollBarThumbWidth)
                 .applyChange();
     }
 
@@ -278,6 +286,8 @@ public class TransformersLayout<T> extends LinearLayout {
 //            Log.e(TAG, "radius = " + options.scrollBarRadius);
             scrollBarTrackColor = options.scrollBarTrackColor == 0 ? scrollBarTrackColor : options.scrollBarTrackColor;
             scrollBarThumbColor = options.scrollBarThumbColor == 0 ? scrollBarThumbColor : options.scrollBarThumbColor;
+            scrollBarThumbFixedMode = options.scrollBarThumbFixedMode;
+            scrollBarThumbWidth = options.scrollBarThumbWidth == 0 ? scrollBarThumbWidth : options.scrollBarThumbWidth;
 
             if (newLines != lines){
                 lines = newLines;
