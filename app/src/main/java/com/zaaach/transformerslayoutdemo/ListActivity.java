@@ -58,7 +58,6 @@ public class ListActivity extends AppCompatActivity {
                     }
                 });
 
-        final List<Nav> navList2 = DataFactory.loadData();
         final TransformersLayout<Nav> header2 = new TransformersLayout<>(this);
         //使用options配置会覆盖xml的属性
         TransformersOptions options = new TransformersOptions.Builder()
@@ -81,7 +80,7 @@ public class ListActivity extends AppCompatActivity {
                         Toast.makeText(getApplication(), "点击：" + header2.getDataList().get(position).getText(), Toast.LENGTH_SHORT).show();
                     }
                 })
-                .load(navList2, new TransformersHolderCreator<Nav>() {
+                .load(navList, new TransformersHolderCreator<Nav>() {
                     @Override
                     public Holder<Nav> createHolder(View itemView) {
                         return new NavAdapterViewHolder(itemView);
@@ -125,11 +124,8 @@ public class ListActivity extends AppCompatActivity {
                         if (navList.size() > 0) {
                             navList.remove(0);
                         }
-                        if (navList2.size() > 0) {
-                            navList2.remove(0);
-                        }
                         header.notifyDataChanged(navList);
-                        header2.notifyDataChanged(navList2);
+                        header2.notifyDataChanged(navList);
                         refreshLayout.setRefreshing(false);
                     }
                 }, 1000);
