@@ -61,6 +61,8 @@ dependencies {
     app:tl_scrollbarRadius="2dp"
     app:tl_scrollbarMarginTop="6dp"
     app:tl_scrollbarMarginBottom="6dp"
+    app:tl_scrollbarThumbFixedMode="true"
+    app:tl_scrollbarThumbFixedWidth="12dp"
     app:tl_scrollbarTrackColor="#f0f0f0"
     app:tl_scrollbarThumbColor="#FFC107"/>
 ```
@@ -113,6 +115,8 @@ TransformersOptions options = new TransformersOptions.Builder()
     	.scrollBarBottomMargin(Util.dp2px(this, 6))
     	.scrollBarTrackColor(Color.parseColor("#e5e5e5"))
         .scrollBarThumbColor(Color.parseColor("#658421"))
+    	.scrollBarThumbFixedMode(true)
+    	.scrollBarThumbWidth(Util.dp2px(this, 12))
         .build();
 header.apply(options)//options可为null
         .addOnTransformersItemClickListener(new OnTransformersItemClickListener() {
@@ -148,9 +152,16 @@ header.apply(options)//options可为null
 | tl_scrollbarMarginBottom | dimension \| reference | scrollbar下间距 |
 | tl_scrollbarRadius | dimension \| reference | scrollbar圆角，默认高度的一半 |
 | tl_scrollbarTrackColor | color \| reference | scrollbar轨道颜色 |
-| tl_scrollbarThumbColor | color \| reference | scrollbar高亮颜色 |
+| tl_scrollbarThumbColor | color \| reference | scrollbar滑块颜色 |
+| tl_scrollbarThumbFixedMode | boolean | scrollbar滑块宽度固定模式 |
+| tl_scrollbarThumbFixedWidth | dimension \|reference | scrollbar滑块宽度 |
 
 # Change log
+
+2021-8-30
+
+- 滚动条滑块宽度固定模式
+- 其他bug修复
 
 2020-12-04
 
